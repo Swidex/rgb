@@ -1,66 +1,73 @@
+bullet_tab = {}
+local player = {x=650,y=350,xVel=0,yVel=0}
+
+
 function love.load()
   rP = 0
   gP = 0
   bP = 0
-  x = 0
-  y = 0
-  xVel = 0
-  yVel = 0
-  maxVel = 25
-  minVel = -25
+  maxVel = 5
+  minVel = -5
+  cooldown = 0
 end
 
 function love.update(dt)
 
-  if xVel > 0 then
-    xVel = xVel - .25
+  cooldown = cooldown - dt
+
+  if love.keyboard.isDown("space") and cooldown < 0 then
+    local bullet = {x=player.x,y=player.y}
+    table.insert(bullet_tab,bullet)
+    cooldown = .5
   end
 
-  if xVel < 0 then
-    xVel = xVel + .25
+  if player.xVel > 0 then
+    player.xVel = player.xVel - .5
   end
 
-  if yVel > 0 then
-    yVel = yVel - .25
+  if player.xVel < 0 then
+    player.xVel = player.xVel + .5
   end
 
-  if yVel < 0 then
-    yVel = yVel + .25
+  if player.yVel > 0 then
+    player.yVel = player.yVel - .5
   end
 
-  x = x + xVel
-  y = y + yVel
+  if player.yVel < 0 then
+    player.yVel = player.yVel + .5
+  end
+
+  player.x = player.x + player.xVel
+  player.y = player.y + player.yVel
 
   if love.keyboard.isDown("d") then
-    if xVel > maxVel then
+    if player.xVel > maxVel then
 
     else
-      xVel = xVel + .5
+      player.xVel = player.xVel + 1
     end
   end
   if love.keyboard.isDown("a") then
-    if xVel < minVel then
+    if player.xVel < minVel then
 
     else
-      xVel = xVel - .5
+      player.xVel = player.xVel - 1
     end
   end
   if love.keyboard.isDown("s") then
-    if yVel > maxVel then
+    if player.yVel > maxVel then
 
     else
-      yVel = yVel + .5
+      player.yVel = player.yVel + 1
     end
   end
   if love.keyboard.isDown("w") then
-    if yVel < minVel then
+    if player.yVel < minVel then
 
     else
-      yVel = yVel - .5
+      player.yVel = player.yVel - 1
     end
   end
-
-
   if love.keyboard.isDown("escape") then
     love.window.close()
   end
@@ -74,15 +81,22 @@ function love.update(dt)
   if love.keyboard.isDown("b") then
     bP = bP + 1
   end
+  for _,bullet in ipairs(bullet_tab) do
+    bullet.y = bullet.y + dt*-250
+  end
 end
 
 function love.draw()
   love.graphics.setBackgroundColor(35,35,35)
+  love.graphics.setLineWidth(5)
   love.graphics.setColor(rP,gP,bP)
-  love.graphics.circle("line", x, y, 50, 500)
+  love.graphics.circle("line",player.x,player.y,20,24)
+  for _,bullet in ipairs(bullet_tab) do
+    love.graphics.circle("line",bullet.x,bullet.y,10,12)
+  end
   love.graphics.setColor(255,255,255)
   love.graphics.print("X Velocity:",0,0)
-  love.graphics.print(xVel,0,10)
+  love.graphics.print(player.xVel,0,10)
   love.graphics.print("Y Velocity:",0,20)
-  love.graphics.print(yVel,0,30)
+  love.graphics.print(player.yVel,0,30)
 end
