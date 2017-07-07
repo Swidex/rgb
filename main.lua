@@ -82,7 +82,7 @@ function love.update(dt)
     bP = bP + 1
   end
   for _,bullet in ipairs(bullet_tab) do
-    bullet.y = bullet.y + dt*-250
+    bullet.y = bullet.y + dt*-400
   end
 end
 
@@ -94,9 +94,4 @@ function love.draw()
   for _,bullet in ipairs(bullet_tab) do
     love.graphics.circle("line",bullet.x,bullet.y,10,12)
   end
-  love.graphics.setColor(255,255,255)
-  love.graphics.print("X Velocity:",0,0)
-  love.graphics.print(player.xVel,0,10)
-  love.graphics.print("Y Velocity:",0,20)
-  love.graphics.print(player.yVel,0,30)
 end
