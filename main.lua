@@ -24,7 +24,7 @@ function love.update(dt)
     yVel = yVel - .25
   end
 
-  if xVel < 0 then
+  if yVel < 0 then
     yVel = yVel + .25
   end
 
