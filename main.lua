@@ -9,6 +9,7 @@ function love.load()
   maxVel = 5
   minVel = -5
   cooldown = 0
+  cooldownBase = .5
 end
 
 function love.update(dt)
@@ -18,7 +19,7 @@ function love.update(dt)
   if love.keyboard.isDown("space") and cooldown < 0 then
     local bullet = {x=player.x,y=player.y}
     table.insert(bullet_tab,bullet)
-    cooldown = .5
+    cooldown = cooldownBase
   end
 
   if player.xVel > 0 then
@@ -79,7 +80,10 @@ function love.update(dt)
     gP = gP + 1
   end
   if love.keyboard.isDown("b") then
-    bP = bP + 1
+    if bP < 255 then
+      bP = bP + 1
+      cooldownBase = cooldownBase - .0016
+    end
   end
   for _,bullet in ipairs(bullet_tab) do
     bullet.y = bullet.y + dt*-400
