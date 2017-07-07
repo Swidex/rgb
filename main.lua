@@ -143,7 +143,6 @@ function love.draw()
   for _,bullet in ipairs(bullet_tab) do
     love.graphics.circle("line",bullet.x,bullet.y,10,12)
   end
-  love.graphics.setColor()
   for _,enemy in ipairs(enemy_tab) do
     love.graphics.circle("line",enemy.x,enemy.y,20,12)
   end
