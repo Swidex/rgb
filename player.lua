@@ -137,6 +137,12 @@ end
 
 function player.draw()
   love.graphics.setLineWidth(1)
+  for i, bullet in ipairs(bullets) do
+    love.graphics.setColor(255,255,255)
+    love.graphics.circle("line",bullet.x,bullet.y,10,24)
+    love.graphics.setColor(rP,gP,bP)
+    love.graphics.circle("fill",bullet.x,bullet.y,10,24)
+  end
   love.graphics.setColor(rP,gP,bP)
   love.graphics.circle("fill",player.x,player.y,20,24)
   love.graphics.setColor(0,0,255)
@@ -147,9 +153,4 @@ function player.draw()
   love.graphics.arc("line",player.x,player.y,25,0,rBar)
   love.graphics.setColor(255,255,255)
   love.graphics.circle("line",player.x,player.y,20,24)
-  for i, bullet in ipairs(bullets) do
-    love.graphics.circle("line",bullet.x,bullet.y,10,24)
-    love.graphics.setColor(rP,gP,bP)
-    love.graphics.circle("fill",bullet.x,bullet.y,10,24)
-  end
 end
