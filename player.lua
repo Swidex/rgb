@@ -116,6 +116,12 @@ function player.update(dt)
       bulletSpeed = bulletSpeed + 5
     end
   end
+  if love.keyboard.isDown("b") then
+    if bP < 255 then
+      bP = bP + 1
+      cooldownMax = cooldownMax - 0.0025
+    end
+  end
   for i, bullet in ipairs(bullets) do
      bullet.y = bullet.y - (bulletSpeed * dt)
      if bullet.y < 0 then
@@ -130,17 +136,20 @@ function player.update(dt)
 end
 
 function player.draw()
-  love.graphics.setLineWidth(5)
+  love.graphics.setLineWidth(1)
+  love.graphics.setColor(rP,gP,bP)
+  love.graphics.circle("fill",player.x,player.y,20,24)
   love.graphics.setColor(0,0,255)
-  love.graphics.arc("line",player.x,player.y,40,0,bBar)
+  love.graphics.arc("line",player.x,player.y,35,0,bBar)
   love.graphics.setColor(0,255,0)
   love.graphics.arc("line",player.x,player.y,30,0,gBar)
   love.graphics.setColor(255,0,0)
-  love.graphics.arc("line",player.x,player.y,20,0,rBar)
+  love.graphics.arc("line",player.x,player.y,25,0,rBar)
   love.graphics.setColor(255,255,255)
-  love.graphics.print(status,0,0)
-  love.graphics.circle("fill",player.x,player.y,10)
+  love.graphics.circle("line",player.x,player.y,20,24)
   for i, bullet in ipairs(bullets) do
-    love.graphics.circle("line",bullet.x,bullet.y,10,12)
+    love.graphics.circle("line",bullet.x,bullet.y,10,24)
+    love.graphics.setColor(rP,gP,bP)
+    love.graphics.circle("fill",bullet.x,bullet.y,10,24)
   end
 end

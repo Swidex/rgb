@@ -11,6 +11,12 @@ end
 function enemy.update(dt)
 
   createEnemyTimer = createEnemyTimer - dt
+  enemyBulletCooldown = enemyBulletCooldown - dt
+  if createEnemyTimer < 0 then
+    createEnemyTimer = createEnemyTimerMax
+    local newEnemy = {x = love.math.random(0,1280),y=150,color=math.random(0,2),redColor=0,greenColor=0,blueColor=0}
+    table.insert(enemies,newEnemy)
+  end
   if createEnemyTimer < 0 then
     createEnemyTimer = createEnemyTimerMax
     local newEnemy = {x = love.math.random(0,1280),y=150,color=math.random(0,2),redColor=0,greenColor=0,blueColor=0}
@@ -38,7 +44,7 @@ function enemy.update(dt)
         if enemy.color == 0 then
           if bP < 255 then
             bP = bP + 1
-            cooldownMax = cooldownMax - .002
+            cooldownMax = cooldownMax - 0.0025
           end
         elseif enemy.color == 1 then
           if gP < 255 then
@@ -53,7 +59,7 @@ function enemy.update(dt)
         end
     end
   end
-  if CheckCollision(enemy.x, enemy.y, 20, 20, player.x, player.y, 10, 10) and isAlive then
+  if CheckCollision(enemy.x, enemy.y, 20, 20, player.x, player.y, 10, 10) then
     table.remove(enemies, i)
     isAlive = false
   end
@@ -63,6 +69,6 @@ end
 function enemy.draw()
   for i, enemy in ipairs(enemies) do
     love.graphics.setColor(enemy.redColor,enemy.greenColor,enemy.blueColor)
-    love.graphics.circle("line",enemy.x,enemy.y,20,12)
+    love.graphics.circle("line",enemy.x,enemy.y,20,32)
   end
 end

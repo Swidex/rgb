@@ -7,13 +7,16 @@ end
 
 require 'player'
 require 'enemy'
+require 'particles'
 
 function love.load()
+  particles.load()
   player.load()
   enemy.load()
 end
 
 function love.update(dt)
+  particles.update(dt)
   player.update(dt)
   enemy.update(dt)
   if love.keyboard.isDown("escape") then
@@ -22,7 +25,8 @@ function love.update(dt)
 end
 
 function love.draw()
-  love.graphics.setBackgroundColor(35,35,35)
+  love.graphics.setBackgroundColor(0,0,0)
+  particles.draw()
   player.draw()
   enemy.draw()
 end
