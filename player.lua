@@ -18,6 +18,8 @@ function player.load()
   bulletDamage = 1
 end
 
+
+
 function player.update(dt)
 
   rBar = (rP/255)*math.pi*2
@@ -27,14 +29,21 @@ function player.update(dt)
   cooldown = cooldown - dt
 
   if love.keyboard.isDown("space") and cooldown < 0 then
-    local newBullet = {x=player.x,y=player.y}
-    table.insert(bullets,newBullet)
-    cooldown = cooldownMax
-  end
+		local startX = player.x + 20 / 2
+		local startY = player.y + 20 / 2
+		local mouseX = love.mouse.getX()
+		local mouseY = love.mouse.getY()
 
+		local angle = math.atan2((mouseY - startY), (mouseX - startX))
+
+		local bulletDx = bulletSpeed * math.cos(angle)
+		local bulletDy = bulletSpeed * math.sin(angle)
+
+		table.insert(bullets, {x = startX, y = startY, dx = bulletDx, dy = bulletDy})
+    cooldown = cooldownMax
+	end
 
   -- MOVEMENT --
-
 
   --restricting movement inside window
 
@@ -122,22 +131,23 @@ function player.update(dt)
       cooldownMax = cooldownMax - 0.0025
     end
   end
-  for i, bullet in ipairs(bullets) do
-     bullet.y = bullet.y - (bulletSpeed * dt)
-     if bullet.y < 0 then
-       table.remove(bullets, i) --removes bullet once out of frame
-     end
-   end
-   if isAlive == false then
-     status = 0
-   else
-     status = 1
-   end
+  for i,bullet in ipairs(bullets) do
+		bullet.x = bullet.x + (bullet.dx * dt)
+		bullet.y = bullet.y + (bullet.dy * dt)
+    if bullet.x > windowWidth or bullet.x < 0 or bullet.y > windowHeight or bullet.y < 0 then
+      table.remove(bullets,i)
+    end
+	end
+  if isAlive == false then
+    status = 0
+  else
+    status = 1
+  end
 end
 
 function player.draw()
   love.graphics.setLineWidth(1)
-  for i, bullet in ipairs(bullets) do
+  for i,bullet in ipairs(bullets) do
     love.graphics.setColor(255,255,255)
     love.graphics.circle("line",bullet.x,bullet.y,10,24)
     love.graphics.setColor(rP,gP,bP)

@@ -8,8 +8,11 @@ end
 require 'player'
 require 'enemy'
 require 'particles'
+require 'camera'
 
 function love.load()
+  windowHeight = love.graphics.getHeight()
+  windowWidth = love.graphics.getWidth()
   particles.load()
   player.load()
   enemy.load()
@@ -25,8 +28,10 @@ function love.update(dt)
 end
 
 function love.draw()
+  camera:set()
   love.graphics.setBackgroundColor(0,0,0)
   particles.draw()
   player.draw()
   enemy.draw()
+  camera:unset()
 end

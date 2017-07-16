@@ -1,11 +1,11 @@
 enemies = {}
-enemyBullets = {}
 enemy = {}
 
 function enemy.load()
   createEnemyTimerMax = .5
-  createEnemyTimer = createEnemyTimerMax
+  createEnemyTimer = 0
   enemyBulletCooldown = 0
+  enemySpeed = 200
 end
 
 function enemy.update(dt)
@@ -13,17 +13,34 @@ function enemy.update(dt)
   createEnemyTimer = createEnemyTimer - dt
   enemyBulletCooldown = enemyBulletCooldown - dt
   if createEnemyTimer < 0 then
+    local color = math.random(0,2)
+    local startX = love.math.random(0,1280)
+		local startY = 0
+
+		local angle = math.atan2((player.y - startY), (player.x - startX))
+
+		local enemyDx = enemySpeed * math.cos(angle)
+		local enemyDy = enemySpeed * math.sin(angle)
+
+		table.insert(enemies, {x = startX, y = startY, dx = enemyDx, dy = enemyDy, redColor = 0, blueColor = 0, greenColor = 0, color = math.random(0,2)})
     createEnemyTimer = createEnemyTimerMax
-    local newEnemy = {x = love.math.random(0,1280),y=150,color=math.random(0,2),redColor=0,greenColor=0,blueColor=0}
-    table.insert(enemies,newEnemy)
-  end
-  if createEnemyTimer < 0 then
-    createEnemyTimer = createEnemyTimerMax
-    local newEnemy = {x = love.math.random(0,1280),y=150,color=math.random(0,2),redColor=0,greenColor=0,blueColor=0}
-    table.insert(enemies,newEnemy)
   end
 
-  for i, enemy in ipairs(enemies) do
+  for i,enemy in ipairs(enemies) do
+		enemy.x = enemy.x + (enemy.dx * dt)
+		enemy.y = enemy.y + (enemy.dy * dt)
+    if enemy.x > windowWidth then
+      enemy.dx = enemy.dx * -1
+    end
+    if enemy.x < 0 then
+      enemy.dx = enemy.dx * -1
+    end
+    if enemy.y < 0 then
+      enemy.dy = enemy.dy * -1
+    end
+    if enemy.y > windowHeight then
+      enemy.dy = enemy.dy * -1
+    end
     if enemy.color == 0 then
       enemy.redColor = 0
       enemy.greenColor = 0

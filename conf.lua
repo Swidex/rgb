@@ -1,6 +1,5 @@
 function love.conf(t)
   t.identity = "rgb"
-  t.version = "0.10.2"
 
   t.window.width = 1280
   t.window.height = 720
