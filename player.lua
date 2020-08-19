@@ -1,13 +1,12 @@
-player = {x=650,y=350,xVel=0,yVel=0}
+player = {x=0,y=0}
 bullets = {}
 
 function player.load()
   rP = 0
   gP = 0
   bP = 0
-  maxVel = 10
-  minVel = -10
-  bulletSpeed= 400
+  bulletSpeed = 400
+  bulletSize = 1
   rBar = 0
   gBar = 0
   bBar = 0
@@ -15,10 +14,7 @@ function player.load()
   cooldownMax = .5
   isAlive = true
   status = 1
-  bulletDamage = 1
 end
-
-
 
 function player.update(dt)
 
@@ -26,94 +22,32 @@ function player.update(dt)
   gBar = (gP/255)*math.pi*2
   bBar = (bP/255)*math.pi*2
 
+  local mouseX = love.mouse.getX()
+  local mouseY = love.mouse.getY()
+  
+  player.x = mouseX
+  player.y = mouseY
+
   cooldown = cooldown - dt
 
   if love.keyboard.isDown("space") and cooldown < 0 then
 		local startX = player.x + 20 / 2
 		local startY = player.y + 20 / 2
-		local mouseX = love.mouse.getX()
-		local mouseY = love.mouse.getY()
 
-		local angle = math.atan2((mouseY - startY), (mouseX - startX))
-
-		local bulletDx = bulletSpeed * math.cos(angle)
-		local bulletDy = bulletSpeed * math.sin(angle)
-
-		table.insert(bullets, {x = startX, y = startY, dx = bulletDx, dy = bulletDy})
+		table.insert(bullets, {x = startX, y = startY, dx = 0, dy = bulletSpeed})
     cooldown = cooldownMax
-	end
-
-  -- MOVEMENT --
-
-  --restricting movement inside window
-
-  if player.x > 1280 then
-    player.xVel = player.xVel*-1
   end
 
-  if player.x < 0 then
-    player.xVel = player.xVel*-1
-  end
+  -- dev tools
 
-  if player.y > 720 then
-    player.yVel = player.yVel*-1
-  end
+  cdmCOEFF = 5
+  sizeCOEFF = .1
+  speedCOEFF = 5
 
-  if player.y < 0 then
-    player.yVel = player.yVel*-1
-  end
+  bulletSize = 10+(rP*sizeCOEFF)
+  bulletSpeed = (-100)-(gP*speedCOEFF)
+  cooldownMax = 0.5-((bP/255)*cdmCOEFF)
 
-  if player.xVel > 0 then
-    player.xVel = player.xVel - .5
-  end
-
-  if player.xVel < 0 then
-    player.xVel = player.xVel + .5
-  end
-
-  if player.yVel > 0 then
-    player.yVel = player.yVel - .5
-  end
-
-  if player.yVel < 0 then
-    player.yVel = player.yVel + .5
-  end
-
-  -- correlating velocity with player location
-
-  player.x = player.x + player.xVel
-  player.y = player.y + player.yVel
-
-  -- keyboard movement changes velocity
-
-  if love.keyboard.isDown("d") then
-    if player.xVel > maxVel then
-
-    else
-      player.xVel = player.xVel + 1
-    end
-  end
-  if love.keyboard.isDown("a") then
-    if player.xVel < minVel then
-
-    else
-      player.xVel = player.xVel - 1
-    end
-  end
-  if love.keyboard.isDown("s") then
-    if player.yVel > maxVel then
-
-    else
-      player.yVel = player.yVel + 1
-    end
-  end
-  if love.keyboard.isDown("w") then
-    if player.yVel < minVel then
-
-    else
-      player.yVel = player.yVel - 1
-    end
-  end
   if love.keyboard.isDown("r") then
     if rP < 255 then
       rP = rP + 1
@@ -122,18 +56,19 @@ function player.update(dt)
   if love.keyboard.isDown("g") then
     if gP < 255 then
       gP = gP + 1
-      bulletSpeed = bulletSpeed + 5
     end
   end
   if love.keyboard.isDown("b") then
     if bP < 255 then
       bP = bP + 1
-      cooldownMax = cooldownMax - 0.0025
     end
   end
+
+  -- bullet code
+  
   for i,bullet in ipairs(bullets) do
 		bullet.x = bullet.x + (bullet.dx * dt)
-		bullet.y = bullet.y + (bullet.dy * dt)
+    bullet.y = bullet.y + (bullet.dy * dt)
     if bullet.x > windowWidth or bullet.x < 0 or bullet.y > windowHeight or bullet.y < 0 then
       table.remove(bullets,i)
     end
@@ -148,12 +83,12 @@ end
 function player.draw()
   love.graphics.setLineWidth(1)
   for i,bullet in ipairs(bullets) do
-    love.graphics.setColor(255,255,255)
-    love.graphics.circle("line",bullet.x,bullet.y,10,24)
-    love.graphics.setColor(rP,gP,bP)
-    love.graphics.circle("fill",bullet.x,bullet.y,10,24)
+    love.graphics.setColor(1,1,1)
+    love.graphics.circle("line",bullet.x,bullet.y,bulletSize*1.15,24)
+    love.graphics.setColor(rP/255,gP/255,bP/255)
+    love.graphics.circle("fill",bullet.x,bullet.y,bulletSize,24)
   end
-  love.graphics.setColor(rP,gP,bP)
+  love.graphics.setColor(rP/255,gP/255,bP/255)
   love.graphics.circle("fill",player.x,player.y,20,24)
   love.graphics.setColor(0,0,255)
   love.graphics.arc("line",player.x,player.y,35,0,bBar)

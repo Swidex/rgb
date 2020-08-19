@@ -9,6 +9,7 @@ require 'player'
 require 'enemy'
 require 'particles'
 require 'camera'
+require 'menu'
 
 function love.load()
   windowHeight = love.graphics.getHeight()
@@ -16,12 +17,14 @@ function love.load()
   particles.load()
   player.load()
   enemy.load()
+  menu.load()
 end
 
 function love.update(dt)
   particles.update(dt)
   player.update(dt)
   enemy.update(dt)
+  menu.update(dt)
   if love.keyboard.isDown("escape") then
     love.window.close()
   end
@@ -34,4 +37,5 @@ function love.draw()
   player.draw()
   enemy.draw()
   camera:unset()
+  menu.draw()
 end

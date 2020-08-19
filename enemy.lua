@@ -17,13 +17,18 @@ function enemy.update(dt)
     local startX = love.math.random(0,1280)
 		local startY = 0
 
-		local angle = math.atan2((player.y - startY), (player.x - startX))
+		local angle = 0;
 
 		local enemyDx = enemySpeed * math.cos(angle)
 		local enemyDy = enemySpeed * math.sin(angle)
 
 		table.insert(enemies, {x = startX, y = startY, dx = enemyDx, dy = enemyDy, redColor = 0, blueColor = 0, greenColor = 0, color = math.random(0,2)})
     createEnemyTimer = createEnemyTimerMax
+  end
+
+  function wait(seconds)
+    local start = os.time()
+    repeat until os.time() > start + seconds
   end
 
   for i,enemy in ipairs(enemies) do
@@ -56,22 +61,21 @@ function enemy.update(dt)
     end
     for j, bullet in ipairs(bullets) do
       if CheckCollision(enemy.x, enemy.y, 30, 30, bullet.x, bullet.y, 20, 20) then
+        love.graphics.setColor(1,1,1)
+        love.graphics.circle("line", enemy.x, enemy.y, bulletSize*2, 32)
         table.remove(bullets, j)
         table.remove(enemies, i)
         if enemy.color == 0 then
           if bP < 255 then
             bP = bP + 1
-            cooldownMax = cooldownMax - 0.0025
           end
         elseif enemy.color == 1 then
           if gP < 255 then
             gP = gP + 1
-            bulletSpeed = bulletSpeed + 5
           end
         elseif enemy.color == 2 then
           if  rP < 255 then
             rP = rP + 1
-            bulletDamage = bulletDamage + 1
           end
         end
     end

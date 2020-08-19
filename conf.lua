@@ -2,7 +2,7 @@ function love.conf(t)
   t.identity = "rgb"
 
   t.window.width = 1280
-  t.window.height = 720
+  t.window.height = 1280
   t.console = false
   t.window.resizable = false
   t.window.title = "RGB - Modern Bullet Hell Game"
